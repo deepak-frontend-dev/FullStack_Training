@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import movieRoutes from "./routes/public/movie.routes.js"
+import authRoutes from "./routes/public/auth.routes.js"
 import { errorMiddleware } from "./middleware/error.middleware.js"
 
 dotenv.config();
@@ -19,6 +20,7 @@ app.get("/api/health", (req, res) => {
 })
 
 app.use("/api/movies", movieRoutes);
+app.use("/api/auth", authRoutes);
 
 app.use(errorMiddleware);
 
