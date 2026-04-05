@@ -1,4 +1,4 @@
-import { getAllMovieService, createMovieService, updateMovieService, deleteMovieService, syncMoviesService } from "../services/movie.service.js";
+import { getAllMovieService, getMovieByIdService, createMovieService, updateMovieService, deleteMovieService, syncMoviesService } from "../services/movie.service.js";
 import { validatePagination } from "../validators/pagination.validation.js";
 import { validateMovie } from "../validators/movie.validation.js";
 
@@ -9,12 +9,20 @@ export const getAllMovies = async (req, res) => {
         return res.status(400).json({ success: false, message: error });
     }
 
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search;
+    const genre = req.query.genre;
 
-    const movies = await getAllMovieService(page, limit);
+    const movies = await getAllMovieService(page, limit, search, genre);
 
     res.status(200).json({ success: true, data: movies });
+};
+
+export const getMovieById = async (req, res) => {
+    const movie = await getMovieByIdService(req.params.id);
+
+    res.status(200).json({ success: true, data: movie });
 };
 
 export const createMovie = async (req, res) => {

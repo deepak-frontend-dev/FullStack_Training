@@ -1,11 +1,16 @@
 export const errorMiddleware = (err, req, res, next) => {
-    console.error(`[${req.method}] ${req.originalUrl}`);
-    console.error(err.stack);
+    const status = err.status || 500;
+    const message = err.message || "Internal server error";
 
-    res.status(err.status || 500).json({
+    console.error(`[ERROR] [${req.method}] ${req.originalUrl} - ${status}: ${message}`);
+    
+    if (status === 500) {
+        console.error(err.stack);
+    }
+
+    res.status(status).json({
         success: false,
-        status: err.status || 500,
-        message: "Internal server error"
-        // message: err.message || "Internal server error"
-    })
-}
+        status,
+        message,
+    });
+};

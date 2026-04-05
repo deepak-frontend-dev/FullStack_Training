@@ -1,17 +1,20 @@
 import express from "express";
-import { getAllMovies, createMovie, updateMovie, deleteMovie, syncMovies } from "../../controllers/movie.controller.js";
+import { getAllMovies, getMovieById, createMovie, updateMovie, deleteMovie, syncMovies } from "../../controllers/movie.controller.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
+import { auth } from "../../middleware/auth.middleware.js";
 
 const router = express.Router();
 
 router.get("/", asyncHandler(getAllMovies));
 
-router.post("/", asyncHandler(createMovie));
+router.get("/:id", asyncHandler(getMovieById));
 
-router.put("/:id", asyncHandler(updateMovie));
+router.post("/", auth, asyncHandler(createMovie));
 
-router.delete("/:id", asyncHandler(deleteMovie));
+router.put("/:id", auth, asyncHandler(updateMovie));
 
-router.post("/sync", asyncHandler(syncMovies));
+router.delete("/:id", auth, asyncHandler(deleteMovie));
+
+router.post("/sync", auth, asyncHandler(syncMovies));
 
 export default router;

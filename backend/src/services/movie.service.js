@@ -1,15 +1,24 @@
 import prisma from "../prisma.js";
 
-export const getAllMovieService = async (page, limit) => {
+export const getAllMovieService = async (page, limit, search, genre) => {
     const skip = (page - 1) * limit;
+
+    const where = {};
+    if (search) {
+        where.title = { contains: search, mode: "insensitive" };
+    }
+    if (genre) {
+        where.genre = genre;
+    }
 
     const [movies, totalMovies] = await Promise.all([
         prisma.movie.findMany({
+            where,
             skip: skip,
             take: limit,
             orderBy: { createdAt: "desc" }
         }),
-        prisma.movie.count()
+        prisma.movie.count({ where })
     ]);
 
     const totalPages = Math.ceil(totalMovies / limit);
@@ -21,6 +30,20 @@ export const getAllMovieService = async (page, limit) => {
         totalMovies: totalMovies,
         data: movies,
     }
+};
+
+export const getMovieByIdService = async (id) => {
+    const movie = await prisma.movie.findUnique({
+        where: { id: Number(id) }
+    });
+
+    if (!movie) {
+        const error = new Error(`Movie with id ${id} not found`);
+        error.status = 404;
+        throw error;
+    }
+
+    return movie;
 };
 
 export const createMovieService = async (data) => {
