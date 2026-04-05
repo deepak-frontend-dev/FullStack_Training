@@ -1,4 +1,5 @@
 export const errorMiddleware = (err, req, res, next) => {
+    console.error(`[${req.method}] ${req.originalUrl}`);
     console.error(err.stack);
 
     res.status(err.status || 500).json({
