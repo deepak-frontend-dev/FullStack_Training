@@ -20,7 +20,7 @@ model Movie {
   title       String
   year        Int?
   genre       String?
-  externalId  String?
+  externalId  String?  @unique
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
