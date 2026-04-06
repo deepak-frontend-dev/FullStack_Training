@@ -1,6 +1,6 @@
-import { getAllMovieService, getMovieByIdService, createMovieService, updateMovieService, deleteMovieService, syncMoviesService } from "../services/movie.service.js";
-import { validatePagination } from "../validators/pagination.validation.js";
-import { validateMovie } from "../validators/movie.validation.js";
+import { getAllMovieService, getMovieByIdService, createMovieService, updateMovieService, deleteMovieService, syncMoviesService } from "./movie.service.js";
+import { validatePagination } from "../../validators/pagination.validation.js";
+import { validateMovie } from "../../validators/movie.validation.js";
 
 export const getAllMovies = async (req, res) => {
     const error = validatePagination(req.query);

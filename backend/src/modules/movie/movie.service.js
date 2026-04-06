@@ -1,4 +1,4 @@
-import prisma from "../prisma.js";
+import prisma from "../../prisma.js";
 
 export const getAllMovieService = async (page, limit, search, genre) => {
     const skip = (page - 1) * limit;

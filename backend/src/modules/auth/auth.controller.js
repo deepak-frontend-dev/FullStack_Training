@@ -1,5 +1,5 @@
-import { registerService, loginService, getMeService } from "../services/auth.service.js";
-import { validateRegister, validateLogin } from "../validators/auth.validator.js";
+import { registerService, loginService, getMeService } from "./auth.service.js";
+import { validateRegister, validateLogin } from "../../validators/auth.validator.js";
 
 export const register = async (req, res) => {
     const error = validateRegister(req.body);

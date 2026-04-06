@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import movieRoutes from "./routes/public/movie.routes.js"
-import authRoutes from "./routes/public/auth.routes.js"
+import movieRoutes from "./modules/movie/movie.routes.js"
+import authRoutes from "./modules/auth/auth.routes.js"
 import { errorMiddleware } from "./middleware/error.middleware.js"
 
 dotenv.config();

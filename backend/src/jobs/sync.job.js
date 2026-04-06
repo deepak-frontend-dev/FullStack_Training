@@ -1,5 +1,5 @@
 import cron from "node-cron";
-import { syncMoviesService } from "../services/movie.service.js";
+import { syncMoviesService } from "../modules/movie/movie.service.js";
 
 export const initSyncJob = () => {
     cron.schedule("0 * * * *", async () => {

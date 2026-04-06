@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllMovies, getMovieById, createMovie, updateMovie, deleteMovie, syncMovies } from "../../controllers/movie.controller.js";
+import { getAllMovies, getMovieById, createMovie, updateMovie, deleteMovie, syncMovies } from "../../modules/movie/movie.controller.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { auth } from "../../middleware/auth.middleware.js";
 
