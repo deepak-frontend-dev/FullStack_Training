@@ -50,7 +50,7 @@ export const createMovieService = async (data) => {
     return await prisma.movie.create({
         data: {
             title: data.title,
-            year: data.year,
+            year: data.year ? Number(data.year) : null,
             genre: data.genre,
             description: data.description
         }
@@ -73,7 +73,7 @@ export const updateMovieService = async (id, data) => {
         where: { id: Number(id) },
         data: {
             title: data.title,
-            year: data.year,
+            year: data.year ? Number(data.year) : null,
             genre: data.genre,
             description: data.description
         }
