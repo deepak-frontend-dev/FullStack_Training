@@ -8,7 +8,10 @@ import { errorMiddleware } from "./middleware/error.middleware.js"
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:3000",
+    credentials: false
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
