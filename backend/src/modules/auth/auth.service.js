@@ -23,7 +23,7 @@ export const registerService = async (name, email, password) => {
         }
     });
 
-    return user;
+    return { id: user.id, name: user.name, email: user.email };
 };
 
 export const loginService = async (email, password) => {
@@ -48,12 +48,12 @@ export const loginService = async (email, password) => {
         { expiresIn: "1d" }
     );
 
-    return { token, user };
+    return { token, id: user.id, name: user.name, email: user.email };
 };
 
-export const getMeService = async (userId) => {
-    const user = await prisma.user.findUnique({
-        where: { id: userId }
+export const getMeService = async (userId, userEmail) => {
+    const user = await prisma.user.findFirst({
+        where: { id: userId, email: userEmail }
     });
 
     if (!user) {
@@ -62,5 +62,5 @@ export const getMeService = async (userId) => {
         throw error;
     }
 
-    return user;
+    return { id: user.id, name: user.name, email: user.email };
 };

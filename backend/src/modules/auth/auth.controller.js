@@ -33,7 +33,8 @@ export const login = async (req, res) => {
 };
 
 export const getMe = async (req, res) => {
-    const user = await getMeService(req.user.id);
+    const { id, email } = req.user;
+    const user = await getMeService(Number(id), email);
 
     res.status(200).json({ success: true, data: user });
 };

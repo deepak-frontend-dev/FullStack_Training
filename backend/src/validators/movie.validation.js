@@ -1,7 +1,7 @@
 export const validateMovie = (data) => {
     const { title, year, genre, description } = data;
     const errors = [];
-    const validGenres = ["Action", "Comedy", "Drama", "Horror", "Sci-Fi", "Romance"];
+    const validGenres = ["Action", "Comedy", "Drama", "Horror", "Sci-Fi", "Romance", "Thriller"];
 
     if (!title || !title.trim()) errors.push("Title is required");
 

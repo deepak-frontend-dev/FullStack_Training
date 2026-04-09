@@ -13,8 +13,9 @@ export const getAllMovies = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const search = req.query.search;
     const genre = req.query.genre;
+    const pagination = req.query.pagination === "true";
 
-    const movies = await getAllMovieService(page, limit, search, genre);
+    const movies = await getAllMovieService(page, limit, search, genre, pagination);
 
     res.status(200).json({ success: true, data: movies });
 };
