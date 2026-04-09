@@ -1,24 +1,19 @@
-import "./globals.css";
-import Link from "next/link";
 import Providers from "../components/Providers";
+import { Toaster } from "react-hot-toast";
+import "./globals.css";
 
 export const metadata = {
   title: "Movie Management Training",
-  description: "Imperfect training app"
+  description: "Imperfect training app",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
+      <body className="bg-gradient-to-br from-gray-900 via-black to-gray-900">
         <Providers>
-          <header className="bg-white border-b p-4 flex gap-4">
-            <Link href="/">Home</Link>
-            <Link href="/movies">Movies</Link>
-            <Link href="/dashboard">Dashboard</Link>
-            <Link href="/login">Login</Link>
-          </header>
-          <main className="p-6">{children}</main>
+          {children}
+          <Toaster position="top-center" />
         </Providers>
       </body>
     </html>

@@ -10,10 +10,10 @@ const movieSlice = createSlice({
   initialState,
   reducers: {
     setMovies(state, action) {
-      state.list = action.payload;
+      state.list = Array.isArray(action.payload) ? action.payload : [];
     },
     addMovie(state, action) {
-      state.list.push(action.payload);
+      state.list.unshift(action.payload);
     },
     setSelectedMovie(state, action) {
       state.selectedMovie = action.payload;
