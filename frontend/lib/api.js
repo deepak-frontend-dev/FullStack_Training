@@ -1,6 +1,6 @@
 import Api from "./axios";
 
-export const getMovies = () => Api.get("/movies");
+export const getMovies = (params) => Api.get("/movies", { params });
 
 export const createMovie = (payload) => Api.post("/movies", payload);
 

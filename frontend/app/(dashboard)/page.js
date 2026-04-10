@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MovieCard from "../../components/MovieCard";
-import { addMovie, setMovies } from "../../store/slices/movieSlice";
+import { addMovie, setMovies, appendMovies } from "../../store/slices/movieSlice";
 import { createMovie, getMovies } from "../../lib/api";
 import toast from "react-hot-toast";
 
@@ -14,22 +14,63 @@ export default function MoviesPage() {
   const [year, setYear] = useState("");
   const [genre, setGenre] = useState("");
 
-  const fetchMovies = async () => {
+  // Pagination State
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const observer = useRef();
+
+  const lastMovieElementRef = useCallback(node => {
+    if (isLoading) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        setPage(prevPage => prevPage + 1);
+      }
+    });
+    if (node) observer.current.observe(node);
+  }, [isLoading, hasMore]);
+
+  const fetchMovies = async (pageNumber = 1, isInitial = false) => {
+    if (isLoading) return;
+    setIsLoading(true);
     try {
-      const res = await getMovies();
+      const res = await getMovies({
+        page: pageNumber,
+        limit: 20,
+        pagination: true
+      });
+
       if (res?.data?.success) {
-        dispatch(setMovies(res.data.data.data));
+        const fetchedMovies = res.data.data.data;
+        const totalPages = res.data.data.totalPages;
+
+        if (isInitial) {
+          dispatch(setMovies(fetchedMovies));
+        } else {
+          dispatch(appendMovies(fetchedMovies));
+        }
+
+        setHasMore(pageNumber < totalPages);
       } else {
         toast.error(res?.data?.message || "Failed to fetch movies");
       }
     } catch (err) {
       toast.error(err?.response?.data?.message || "Failed to fetch movies");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchMovies();
+    fetchMovies(1, true);
   }, []);
+
+  useEffect(() => {
+    if (page > 1) {
+      fetchMovies(page);
+    }
+  }, [page]);
 
   async function handleAddMovie() {
     if (!title || !year || !genre) {
@@ -110,14 +151,33 @@ export default function MoviesPage() {
             No movies added yet.
           </p>
         ) : (
-          movies.map((movie) => (
-            <div
-              className="animate-[fadeIn_0.5s_ease] h-full w-full snap-start"
-              key={movie.id || `${movie.title}-${movie.year}`}
-            >
-              <MovieCard movie={movie} />
-            </div>
-          ))
+          movies.map((movie, index) => {
+            if (movies.length === index + 1) {
+              return (
+                <div
+                  ref={lastMovieElementRef}
+                  className="animate-[fadeIn_0.5s_ease] h-full w-full snap-start"
+                  key={movie.id || `${movie.title}-${movie.year}-${index}`}
+                >
+                  <MovieCard movie={movie} />
+                </div>
+              );
+            } else {
+              return (
+                <div
+                  className="animate-[fadeIn_0.5s_ease] h-full w-full snap-start"
+                  key={movie.id || `${movie.title}-${movie.year}-${index}`}
+                >
+                  <MovieCard movie={movie} />
+                </div>
+              );
+            }
+          })
+        )}
+        {isLoading && (
+          <div className="col-span-full flex justify-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
         )}
       </div>
     </div>
